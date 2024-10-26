@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Anggota</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Daftar Anggota</h2>
+
+        <!-- Table for displaying members -->
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID Anggota</th>
+                    <th>Nama</th>
+                    <th>Alamat</th>
+                    <th>No HP</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.nama }}</td>
+                    <td>{{ user.alamat }}</td>
+                    <td>{{ user.no_hp }}</td>
+                    <td>
+                        <!-- Edit Button -->
+                        <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
+                            data-id="{{ user.id }}" data-nama="{{ user.nama }}" data-alamat="{{ user.alamat }}"
+                            data-no_hp="{{ user.no_hp }}">Edit</button>
+
+                        <!-- Delete Button -->
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapusModal"
+                            data-id="{{ user.id }}">Hapus</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Button to trigger Add Modal -->
+        <button class="btn btn-primary mb-4" data-toggle="modal" data-target="#tambahModal">Tambah Anggota</button>
+    </div>
+
+    <!-- Add Modal -->
+    <div class="modal fade" id="tambahModal" tabindex="-1" aria-labelledby="tambahModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ url_for('tambah_anggota') }}" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tambahModalLabel">Tambah Anggota</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nama">Nama</label>
+                            <input type="text" class="form-control" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="alamat">Alamat</label>
+                            <input type="text" class="form-control" name="alamat" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="no_hp">No HP</label>
+                            <input type="text" class="form-control" name="no_hp" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">Edit Anggota</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editNama">Nama</label>
+                            <input type="text" class="form-control" id="editNama" name="nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editAlamat">Alamat</label>
+                            <input type="text" class="form-control" id="editAlamat" name="alamat" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editNoHp">No HP</label>
+                            <input type="text" class="form-control" id="editNoHp" name="no_hp" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="hapusModal" tabindex="-1" aria-labelledby="hapusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="hapusForm" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="hapusModalLabel">Hapus Anggota</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin menghapus anggota ini?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Hapus</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS buat Modal -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Edit Modal
+        $('#editModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            const id = button.data('id');
+            const nama = button.data('nama');
+            const alamat = button.data('alamat');
+            const no_hp = button.data('no_hp');
+            const modal = $(this);
+
+            modal.find('#editNama').val(nama);
+            modal.find('#editAlamat').val(alamat);
+            modal.find('#editNoHp').val(no_hp);
+
+            if (id) {
+                $('#editForm').attr('action', `/anggota/edit/${id}`);
+            } else {
+                console.error("ID missing for Edit action");
+            }
+        });
+
+        // Delete modal
+        $('#hapusModal').on('show.bs.modal', function (event) {
+            const button = $(event.relatedTarget);
+            const id = button.data('id');
+
+            if (id) {
+                $('#hapusForm').attr('action', `/anggota/hapus/${id}`);
+            } else {
+                console.error("ID missing for Delete action");
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Koperasi</title>
+    <style>
+        /* Global Styling */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-left: 90px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+       #logout {
+       margin-top: auto;
+       text-decoration: none;
+       color: white;
+       padding: 10px;
+       display: block;
+       background-color: #e74c3c;
+       text-align: center;
+       border-radius: 5px;
+       }
+
+       #logout:hover {
+       background-color: #c0392b;
+       }
+
+        /* Sidebar Styling */
+        #navbar {
+            background-color: #343a40;
+            color: white;
+            width: 20%;
+            height: 100%;
+            padding-top: 10px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            position: fixed;
+        }
+
+        #navbar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #navbar ul li {
+            margin: 0;
+            position: relative;
+        }
+
+        #navbar ul li a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            display: block;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        #navbar ul li a:hover {
+            background-color: #495057;
+            padding-left: 30px;
+        }
+
+        /* Dropdown Menu */
+        #navbar ul li .dropdown {
+            display: none;
+            background-color: #495057;
+            padding-left: 15px;
+        }
+
+        #navbar ul li:hover .dropdown {
+            display: block;
+        }
+
+        /* Styling dropdown items */
+        .dropdown a {
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+
+        .dropdown a.active {
+            background-color: #007bff;
+            color: white;
+            padding-left: 30px;
+            font-weight: bold;
+        }
+
+        .dropdown a.unactive {
+            color: #ced4da;
+        }
+
+        /* Main content and iframe styling */
+        #main-content {
+            margin-left: 20%;
+            width: 80%;
+            padding: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            display: none;
+        }
+
+        iframe.active {
+            display: block;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            #navbar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            #main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header with Logout Button -->
+    <header>
+        <h1>Sistem Informasi Koperasi</h1>
+    </header>
+
+    <!-- Sidebar with Navigation Links and Dropdown Menu -->
+    <div id="navbar">
+        <ul>
+            <li><a id="logout" href="/logout">Logout</a></li>
+            <li><a href="#" onclick="showIframe('aboutIframe', this)" class="active" id="defaultLink">Tentang Kami</a>
+            </li>
+            <li>
+                <a href="#">Data</a>
+                <ul class="dropdown">
+                    <li><a href="#" onclick="showIframe('anggotaIframe', this)" class="unactive">Daftar Anggota</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Transaksi</a>
+                <ul class="dropdown">
+                    <li><a href="#" onclick="showIframe('transaksiIframe', this)" class="unactive">Daftar Transaksi</a>
+                    </li>
+
+                </ul>
+            </li>
+        </ul>
+       
+    </div>
+    
+
+    <!-- Main Content Area -->
+    <div id="main-content">
+        <iframe id="aboutIframe" src="/ab"></iframe>
+        <iframe id="anggotaIframe" src="/anggota"></iframe>
+        <iframe id="transaksiIframe" src="/transaksi"></iframe>
+    </div>
+
+    <script>
+        window.onload = function () {
+            showIframe('aboutIframe', document.getElementById("defaultLink"));
+        }
+
+        function showIframe(iframeId, element) {
+            var iframes = document.querySelectorAll('iframe');
+            iframes.forEach(function (iframe) {
+                iframe.classList.remove('active');
+            });
+            document.getElementById(iframeId).classList.add('active');
+            var links = document.querySelectorAll('#navbar ul li .dropdown a');
+            links.forEach(function (link) {
+                link.classList.remove('active');
+                link.classList.add('unactive');
+            });
+            element.classList.add('active');
+            element.classList.remove('unactive');
+        }
+    </script>
+</body>
+
+</html>
